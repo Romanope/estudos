@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html ng-app="moduleApp">
+<head>
+	<meta charset="UTF-8">
+	<title>Brincando com a tabela em angular!!!</title>
+	<script type="text/javascript" src="angular/angular.js"></script>
+	<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css"">
+	<style type="text/css">
+		
+		.wrapper {
+		  height: 100%;
+		  min-height: 100%;
+		  display: -webkit-flex;
+		  display: flex;
+		  -webkit-align-items: center;
+		  align-items: center;
+		  -webkit-justify-content: center;
+		  justify-content: center;
+		  font-weight: bold;
+		  background-color: #f0f5f5;
+		}
+
+		h2 {
+		  color: #6d2db0;
+		  font-size: 2em;
+		  text-align: center;
+		}
+
+		h2:after, h2:before {
+		  content: '';
+		  display: block;
+		  width: 80px;
+		  height: 3px;
+		  background: #6d2db0;
+		  margin: 0 auto;
+		}
+		.caption {
+			font-size: 1.2em;
+			color:  #ffffe6;
+		}
+
+		.jumbotron {
+			width: 800px;
+			text-align: center;
+			margin-left: auto;
+			margin-right: auto;
+			margin-top: 20px;
+			
+		}
+
+		.collapse {
+		    max-height: 0;
+		    transition: max-height 0.15s ease-out;
+		    overflow: hidden;
+		    background: #d5d5d5;
+		}
+
+		.expand {
+		    max-height: 500px;
+		    transition: max-height 0.25s ease-in;
+		}
+	
+
+	</style>
+	<script type="text/javascript">
+		var id = 0;
+		angular.module("moduleApp", []);
+		angular.module("moduleApp").controller("posicaoController", function($scope){
+				var criarProdutos = function () {
+						$scope.produtos = [{
+						codProduto: 1,
+						nomeProduto: "Produto 1",
+						instrumentos: [
+							{
+								codInstrumento: 1, 
+								nomeInstrumento: "Instrumento 1",
+								posicoes: [
+									{codPosicao: 1, nomePosicao: "posicao 1", dataPosicao: new Date(), valorPosicao: 100.00},
+									{codPosicao: 2, nomePosicao: "posicao 2", dataPosicao: new Date(), valorPosicao: 150.00}
+								],
+								valorTotal: 250.00
+							},
+							{
+								codInstrumento: 2, 
+								nomeInstrumento: "Instrumento 2",
+								posicoes: [
+									{codPosicao: 3, nomePosicao: "posicao 3", dataPosicao: new Date(), valorPosicao: 150.00},
+									{codPosicao: 4, nomePosicao: "posicao 4", dataPosicao: new Date(), valorPosicao: 300.00}
+								],
+								valorTotal: 400.00
+							}
+						],
+						valorTotal: 650.00
+					},
+					{
+						codProduto: 2,
+						nomeProduto: "Produto 2",
+						instrumentos: [
+							{
+								codInstrumento: 3, 
+								nomeInstrumento: "Instrumento 3",
+								posicoes: [
+									{codPosicao: 5, nomePosicao: "posicao 5", dataPosicao: new Date(), valorPosicao: 1000.00},
+									{codPosicao: 6, nomePosicao: "posicao 6", dataPosicao: new Date(), valorPosicao: 1510.00}
+								],
+								valorTotal: 2510.00
+							},
+							{
+								codInstrumento: 4, 
+								nomeInstrumento: "Instrumento 4",
+								posicoes: [
+									{codPosicao: 7, nomePosicao: "posicao 7", dataPosicao: new Date(), valorPosicao: 123.00},
+									{codPosicao: 8, nomePosicao: "posicao 8", dataPosicao: new Date(), valorPosicao: 311.00}
+								],
+								valorTotal: 434.00
+							}
+						],
+						valorTotal: 2944.00
+					}];		
+				}
+
+				$scope.collapsable = function (idDiv, $event) {
+					
+					var div = document.getElementById('produto' + idDiv);
+					for (var j = 0; j < div.classList.length; j++) {
+						if (div.classList[j] === "expand") {
+							div.classList.remove("expand");
+							div.classList.add("collapse");
+							$event.target.innerHTML = '<img src="images/plus.png" />';
+							break;
+						} else if (div.classList[j] === "collapse") {
+							div.classList.remove("collapse");
+							div.classList.add("expand");
+							$event.target.innerHTML = '<img src="images/minus.png" />';
+							break;
+						}
+					}
+				}
+				criarProdutos();
+		});
+	</script>
+	
+	
+</head>
+<body ng-controller="posicaoController">
+		
+		<div class="jumbotron" ng-repeat="produto in produtos">
+					
+			<table class="table">
+				<thead>
+					<tr>
+						<th colspan="4">Produto: {{produto.codProduto}} - {{produto.nomeProduto}}</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<div style="text-align: left;">
+								<button id="button" class="collapsible" ng-click="collapsable(produto.codProduto, $event)"><img src="images/minus.png" /></button>
+							</div>
+							<div class="expand" id="produto{{produto.codProduto}}">
+								<div ng-repeat="instrumento in produto.instrumentos">
+									<div >
+										<div >
+											<table class="table table-striped">
+												<thead>
+													<tr>
+														<th colspan="4" style="text-align: left;">Instrumento: {{instrumento.codInstrumento}} - {{instrumento.nomeInstrumento}}</th>
+													</tr>
+													<tr>
+														<th>Código</th>
+														<th>Nome</th>
+														<th>Data</th>
+														<th>Valor</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr ng-repeat="posicao in instrumento.posicoes">
+														<td>{{posicao.codPosicao}}</td>
+														<td>{{posicao.nomePosicao}}</td>
+														<td>{{posicao.dataPosicao | date}}</td>
+														<td>{{posicao.valorPosicao | currency}}</td>
+													</tr>
+												</tbody>
+												<tfoot>
+													<tr>
+														<td style="text-align: right;" colspan="4">Valor total: {{instrumento.valorTotal}}</td>
+													</tr>
+												</tfoot>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+				<tfoot>
+					<tr>
+						<td colspan="4" style="text-align: right;">Valor Total: {{produto.valorTotal}}</td>
+					</tr>
+				</tfoot>
+			</table>
+		</div>
+</body>
+</html>
